@@ -1,4 +1,4 @@
-##EE2016 MUP LAB
+EE2016 MUP LAB
 
 A collection of AVR, ARM, and Verilog projects developed as part of coursework, laboratory exercises in EE2016 MUP LAB
 
