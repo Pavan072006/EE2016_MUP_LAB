@@ -1,0 +1,33 @@
+/*
+Developer   - Sriram Venkata Krishna
+Date        - 07-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 1
+Problem 	- 3
+*/
+
+;1.3 - Multiplication of two 8-Bit Numbers
+
+.CSEG
+
+SETUP :
+	LDI ZL, LOW(NUM<<1);
+	LDI ZH, HIGH(NUM<<1);
+	LDI XH, 0x00;
+	LDI XL, 0x60;
+
+
+CODE : 
+	LPM R16, Z+;
+	LPM R17, Z;
+	MUL R16, R17;
+
+DONE :
+	ST X+, R0;
+	ST X, R1;
+	NOP;
+
+NUM: .db 0xD3, 0x5F;

@@ -1,0 +1,60 @@
+/*
+Developer   - Sriram Venkata Krishna
+Date        - 07-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 1
+Problem     - 4
+*/
+
+;1.4 - Largest 16-Bit Number of the given
+
+.CSEG
+
+SETUP :
+	LDI ZL, LOW(NUM<<1);
+	LDI ZH, HIGH(NUM<<1);
+	LDI XH, 0x00;
+	LDI XL, 0x60;
+	LDI R16, 01;
+	LPM R0, Z;
+
+	LDI ZL, LOW(NUMS<<1);
+	LDI ZH, HIGH(NUMS<<1);
+	LPM R2, Z+;
+	LPM R3, Z+;
+	SUB R0, R16;
+
+
+LOOP : 
+	LPM R4, Z+;
+	LPM R5, Z+;
+	SUB R0, R16;
+
+	CP R2, R4;
+	BRLO REPLACE;
+	BREQ CHECK_LSB;
+	BRSH SKIP_REPLACE; 
+
+CHECK_LSB :
+	CP R3, R5;
+	BRSH SKIP_REPLACE;
+
+REPLACE :
+	MOV R2, R4;
+	MOV R3, R5;
+
+SKIP_REPLACE : 
+	CP R0, R16;
+	BRGE LOOP;
+
+DONE :
+	ST X+, R2;
+	ST X, R3;
+	NOP;
+
+NUM: .db 0x03, 0x00;
+NUMS: .db 0x13, 0x1F, 0xF5, 0xD2, 0x55, 0xF5, 0x01, 0x01;
+

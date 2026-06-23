@@ -1,0 +1,42 @@
+/*
+Developer   - Sriram Venkata Krishna
+Date        - 07-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 1
+Problem 	- 2
+*/
+
+;1.2 - Addition of two 16-Bit Numbers
+
+.CSEG
+
+SETUP :
+	LDI ZL, LOW(NUM1<<1);
+	LDI ZH, HIGH(NUM1<<1);
+	LPM R16, Z+;
+	LPM R17, Z;
+	LDI ZL, LOW(NUM2<<1);
+	LDI ZH, HIGH(NUM2<<1);
+	LPM R18, Z+;
+	LPM R19, Z;
+	LDI XL, 0x60;
+	LDI XH, 0x00;
+
+CODE : 
+	LDI R20, 0X00;
+	ADD R17, R19;
+	ADC R16, R18;
+	BRCC DONE;
+	LDI R16, 0x01;
+
+DONE :
+	ST X+, R16;
+	ST X+, R17;
+	ST X, R20;
+	NOP;
+
+NUM1: .db 0xD3, 0x5F;
+NUM2: .db 0x15, 0xD2;
