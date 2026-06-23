@@ -1,0 +1,37 @@
+; Date			- 22-09-2025
+; Software		- Keil Micro-Vision 5
+; Controller	- ARM LPC2148
+
+; Experiment	- 5
+; Example		- 3
+
+; Ex 5.3 - Load two 16-Bit Numbers, Operate them and Store the Results
+
+		AREA Example_3, CODE, READONLY		; Code Section 
+		ENTRY								; Entry Point
+		
+start	LDR 	R0, NUM1					; R0 = NUM1
+		LDR 	R1, NUM2					; R1 = NUM2
+		ADD 	R2, R0, R1					; R2 = R1 + R0
+		RSB 	R3, R0, R1					; R3 = R1 - R0
+		
+		LDR		R4, =RESULT1				; R4 = Address of RESULT1	
+		LDR		R5, =RESULT2				; R5 = Address of RESULT2	
+		
+		STR 	R2, [R4]					; RESULT1 = R2
+		STR		R3, [R5]					; RESULT2 = R3
+		
+stop	B 		stop						; Infinite Loop
+		
+NUM1	DCW 	&01111						; NUM1 = 0x1111
+		ALIGN
+NUM2	DCW		&04567						; NUM2 = 0x4567	
+		ALIGN
+			
+			
+		AREA DataRAM, DATA, READWRITE
+			
+RESULT1	DCD		0							; 32-Bit Space for RESULT1 (Sum)
+RESULT2	DCD		0							; 32-Bit Space for RESULT2 (Reverse Difference)
+
+		END									; End of File

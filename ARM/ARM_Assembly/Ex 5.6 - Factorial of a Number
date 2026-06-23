@@ -1,0 +1,38 @@
+; Developer    	- Sriram Venkata Krishna
+; Date          - 23-09-2025
+; Software      - Keil Micro-Vision 5
+; Controller    - ARM LPC2148
+
+; Experiment    - 5
+; Example       - 6
+
+; Ex 5.6 - Factorial of a Number
+
+        AREA Example_6, CODE, READONLY        ; Code Section 
+        ENTRY                                 ; Entry Point
+        
+start   LDR     R0, NUM1                      ; R0 = NUM1
+		MOV     R1, #1                        ; R1 = 1 
+        MOV     R2, #0                        ; R2 = 0
+                
+        LDR     R4, =RESULT                   ; R4 = Address of RESULT    
+
+loop	ADD     R2, R2, #1                    ; R2 = R2 + 1 
+		MUL     R1, R2, R1                    ; R1 = R2 * R1 
+        CMP     R0, R2                        ; Compare R0 & R2
+        BNE     loop                          ; Loop
+        
+        STR     R1, [R4]                      ; RESULT = R1
+        
+stop    B       stop                          ; Infinite Loop 
+        
+NUM1    DCW     &05                           ; NUM1 = 0x5
+        ALIGN
+			
+            
+        AREA DataRAM, DATA, READWRITE
+            
+RESULT  DCD     0                             ; Space for RESULT
+
+        END                                   ; End of File
+	

@@ -1,0 +1,15 @@
+		AREA Example, CODE, READONLY     ; Define a code section named 'Example', read-only
+		ENTRY                           ; Mark the entry point of the program
+
+        mov     R0, #5
+        mov     R1, #1
+        mov     R3, #1
+
+loop    mul     R1, R3, R1
+        cmp     R3, R0
+        add     R3, R3, #1
+        BNE     loop
+
+stop    B       stop             ; Branch to 'stop' (creates an infinite loop to halt execution)
+
+		END                             ; End of the assembly file

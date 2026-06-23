@@ -1,0 +1,27 @@
+		AREA PROG13, CODE, READONLY     ; Fibonacci numbers stored in memory
+		ENTRY
+
+        LDR     R2, =FROM
+        LDR     R3, =TO
+        MOV    	R6, #5
+		LDR		R1, [R2], #4
+        STR     R1, [R3], #4
+        MOV     R5, #1
+        SUB     R6, R6, #1
+
+BACKK   LDR     R1, [R2], #4
+        STR     R1, [R3], #4
+        ADD     R5, R5, #1
+        CMP     R5, R6
+        BLS     BACKK
+
+GO      B       GO
+
+
+FROM    DCD 0x12345678, 0x9ABCDEF0, 0x0000FFFF, 0xDEADBEEF, 0xCAFEBABE
+
+		AREA DataRAM, DATA, READWRITE
+			
+TO   	SPACE   200
+
+		END

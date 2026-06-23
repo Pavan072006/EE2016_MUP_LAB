@@ -1,0 +1,20 @@
+; Developer		- Sriram Venkata Krishna
+; Date			- 22-09-2025
+; Software		- Keil Micro-Vision 5
+; Controller	- ARM LPC2148
+
+; Experiment	- 5
+; Example		- 1
+
+; Ex 5.1 - Addition of 32-Bit Numbers
+
+		AREA Example_1, CODE, READONLY		; Code Section 
+		ENTRY								; Entry Point
+		
+start	MOV 	R0, #10						; R0 = 10
+		MOV 	R1, #3						; R1 = 3
+		ADD 	R0, R0, R1					; R0 = R0 + R1
+		
+stop 	B		stop						; Infinite Loop
+
+		END									; End of File

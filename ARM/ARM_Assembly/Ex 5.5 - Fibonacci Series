@@ -1,0 +1,40 @@
+; Developer		- Sriram Venkata Krishna
+; Date			- 22-09-2025
+; Software		- Keil Micro-Vision 5
+; Controller	- ARM LPC2148
+
+; Experiment	- 5
+; Example		- 5
+
+; Ex 5.5 - Fibonacci Series
+
+		AREA Example_5, CODE, READONLY		; Code Section 
+		ENTRY								; Entry Point
+		
+start	LDR 	R0, NUM1					; R0 = NUM1
+		MOV		R1, #0						; R1 = 0 
+		MOV 	R2, #1						; R2 = 1
+		MOV 	R3, #0						; R3 = 0
+		MOV 	R4, #0						; R4 = 0
+		
+		LDR		R6, =RESULT 				; R6 = Address of RESULT	
+
+loop	ADD		R1, R1, #1					; R1 = R1 + 1
+		ADD		R4, R3, R2					; R4 = R3 + R2
+		STRB 	R4, [R6], #1				; [R6] = R4, R6 = R6 + 1 
+		MOV		R2, R3						; R2 = R3
+		MOV 	R3, R4						; R4 = R3
+		CMP		R0, R1						; Compare R0 & R1
+		BNE		loop						; Loop 
+		
+stop	B 		stop						; Infinite Loop
+		
+NUM1	DCW 	&05							; NUM1 = 0x5
+		ALIGN
+			
+			
+		AREA DataRAM, DATA, READWRITE
+			
+RESULT 	SPACE	60							; Space for RESULT
+
+		END									; End of File
