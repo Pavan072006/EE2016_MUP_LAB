@@ -1,0 +1,105 @@
+/*
+Developer   - Sriram Venkata Krishna and Subhajit Patra
+Date        - 19-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 3
+Question	- 2
+*/
+
+;3.2 - Interrupt to Blink an LED 10 Times (INT0)
+
+.org 0
+RJMP RESET;
+
+.org 0x0002;
+RJMP INT0_ISR;
+
+.org 0x0100;
+
+RESET :
+    LDI R16, 0x70;
+	OUT SPL, R16;
+	LDI R16, 0x00;
+	OUT SPH, R16;
+
+	LDI R16, 0x01;
+	OUT DDRB, R16;
+	LDI R16, 0x00;
+	OUT DDRD, R16;
+
+	IN R16, MCUCR;
+	ORI R16, (1<<ISC01)|(1<<ISC00);
+	OUT MCUCR, R16;
+
+	IN R16, GICR;
+	ORI R16, (1<<INT0);
+	OUT GICR, R16;
+
+	LDI R16, 0x00;
+	OUT PORTB, R16;
+
+	SEI;
+
+LOOP :
+	RJMP LOOP;
+
+INT0_ISR :
+	IN R16, SREG;
+	PUSH R16;
+
+	LDI R16, 10;
+	MOV R0, R16;
+
+LED_ON:
+	LDI R16, 0xFF;
+	OUT PORTB, R16;
+
+DELAY_1 :
+	LDI R16, 0x16;
+
+DELAY_1A :
+	LDI R17, 0x32;
+
+DELAY_1B :
+	LDI R18, 0x64;
+
+DELAY_1C :
+	DEC R18;
+	BRNE DELAY_1C;
+	DEC R17;
+	BRNE DELAY_1B;
+	DEC R16;
+	BRNE DELAY_1A;
+
+LED_OFF :
+	LDI R16, 0x00;
+	OUT PORTB, R16;
+
+DELAY_2 :
+	LDI R16, 0x16;
+
+DELAY_2A :
+	LDI R17, 0x32;
+
+DELAY_2B :
+	LDI R18, 0x64;
+
+DELAY_2C :
+	DEC R18;
+	BRNE DELAY_2C;
+	DEC R17;
+	BRNE DELAY_2B;
+	DEC R16;
+	BRNE DELAY_2A;
+
+LOOP_ISR :
+	DEC R0;
+	BRNE LED_ON;
+
+EXIT_ISR :
+	POP R16;
+	OUT SREG, R16;
+	RETI;
