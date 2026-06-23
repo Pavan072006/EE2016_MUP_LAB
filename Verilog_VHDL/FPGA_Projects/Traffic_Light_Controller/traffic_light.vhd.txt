@@ -1,0 +1,99 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+entity traffic_light is
+    port(
+        clk: in std_logic;     -- 50 MHz clock (Pin N11)
+        Sa, Sb: in std_logic; -- Car sensors (SW0, SW1)
+        Ra, Ya, Ga: out std_logic; -- Road A lights (LED0, LED1, LED2)
+        Rb, Yb, Gb: out std_logic  -- Road B lights (LED3, LED4, LED5)
+    );
+end traffic_light;
+
+architecture behave of traffic_light is
+    signal state, nextstate: integer range 0 to 12;
+    
+    -- Clock divider signals
+    signal clk_count: integer range 0 to 49_999_999; -- For 50 MHz clock
+    signal clk_1hz_enable: std_logic;
+    
+begin
+
+    -- Combinational process for FSM next state logic and outputs
+    process(state, Sa, Sb)
+    begin
+        -- Default all lights to off (Red)
+        Ra <= '1'; Ya <= '0'; Ga <= '0';
+        Rb <= '1'; Yb <= '0'; Gb <= '0';
+        
+        -- Default: stay in the same state unless a condition is met
+        nextstate <= state; 
+        
+        case state is
+            when 0 to 4 => -- State A-Green (5 seconds)
+                Ga <= '1'; Rb <= '1';
+                Ra <= '0'; -- Turn off Red A
+                nextstate <= state + 1;
+                
+            when 5 => -- State A-Green-Wait
+                Ga <= '1'; Rb <= '1';
+                Ra <= '0'; -- Turn off Red A
+                if Sb = '1' then    -- Wait for car on B
+                    nextstate <= 6;
+                else
+                    nextstate <= 5; -- Stay in this state
+                end if;
+                
+            when 6 => -- State A-Yellow (1 second)
+                Ya <= '1'; Rb <= '1';
+                Ra <= '0'; -- Turn off Red A
+                nextstate <= 7;
+                
+            when 7 to 10 => -- State B-Green (4 seconds)
+                Ra <= '1'; Gb <= '1';
+                Rb <= '0'; -- Turn off Red B
+                nextstate <= state + 1;
+                
+            when 11 => -- State B-Green-Wait
+                Ra <= '1'; Gb <= '1';
+                Rb <= '0'; -- Turn off Red B
+                if (Sa = '1' or Sb = '0') then -- Wait for car on A or no car on B
+                    nextstate <= 12;
+                else
+                    nextstate <= 11; -- Stay in this state
+                end if;
+                
+            when 12 => -- State B-Yellow (1 second)
+                Ra <= '1'; Yb <= '1';
+                Rb <= '0'; -- Turn off Red B
+                nextstate <= 0;
+                
+        end case;
+    end process;
+
+    -- Clock divider process (50 MHz to 1 Hz)
+    process(clk)
+    begin
+        if clk'event and clk = '1' then
+            if clk_count = 49_999_999 then
+                clk_count <= 0;
+                clk_1hz_enable <= '1';
+            else
+                clk_count <= clk_count + 1;
+                clk_1hz_enable <= '0';
+            end if;
+        end if;
+    end process;
+
+    -- Synchronous process for FSM state register
+    process(clk)
+    begin
+        if clk'event and clk = '1' then
+            if clk_1hz_enable = '1' then
+                state <= nextstate;
+            end if;
+        end if;
+    end process;
+
+end behave;
