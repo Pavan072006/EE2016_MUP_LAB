@@ -1,0 +1,31 @@
+/*
+Developer   - Sriram Venkata Krishna and Subhajit Patra
+Date        - 12-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 2
+Question	- 2
+*/
+
+;2.2 - Controlling an LED with a Push-Button
+
+#include "m8def.inc"
+
+SETUP :
+    LDI R30, 0x00;
+	OUT DDRB, R30;
+	LDI R30, 0xFF;
+	OUT DDRD, R30;
+	LDI R17, 0xFF;
+
+
+LOOP:
+	IN R16, PINB;
+	EOR R16, R17;
+	OUT PORTD, R16;	
+
+DONE :
+	RJMP LOOP;
+	NOP;

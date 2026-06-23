@@ -1,0 +1,49 @@
+/*
+Developer   - Sriram Venkata Krishna and Subhajit Patra
+Date        - 12-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 2
+Question	- 1
+*/
+
+;2.1 - Blinking LED with a Frequency of 1Hz
+
+#include "m8def.inc"
+
+SETUP :
+    LDI R30, 0xFF;
+	OUT DDRD, R30;
+	LDI R16, 0xFF;
+	LDI R17, 0xFF;
+
+
+LOOP:
+	OUT PORTD, R16;
+	RJMP DELAY_500MS;
+
+DELAY_500MS:
+	LDI R20, 0x16;
+
+	DELAY_1:
+		LDI R19, 0x32;
+
+	DELAY_2:
+		LDI R18, 0x64;
+
+	DELAY_3:
+		DEC R18;
+		BRNE DELAY_3;
+
+		DEC R19;
+		BRNE DELAY_2; 
+				
+		DEC R20;
+		BRNE DELAY_1;	
+
+DONE :
+	EOR R16, R17;
+	RJMP LOOP;
+	NOP;

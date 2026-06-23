@@ -1,0 +1,35 @@
+/*
+Developer   - Sriram Venkata Krishna and Subhajit Patra
+Date        - 12-08-2025
+Processor   - ATmega8
+*/
+
+/*
+Experiment	- 2
+Question	- 4
+*/
+
+;2.4 - 4-Bit Addition from a Single 8-Bit DIP Input
+
+#include "m8def.inc"
+
+SETUP :
+    LDI R30, 0x00;
+	OUT DDRD, R30;
+	LDI R30, 0xFF;
+	OUT DDRC, R30;
+
+
+LOOP:
+	IN R16, PIND;
+	MOV R17, R16;
+	ANDI R17, 0x0F;
+	MOV R18, R16;
+	SWAP R18;
+	ANDI R18, 0x0F;
+	ADD R17, R18;
+	OUT PORTC, R17;
+
+DONE :
+	RJMP LOOP;
+	NOP;
